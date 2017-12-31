@@ -19,7 +19,7 @@ public class Submarine extends JLabel implements Runnable {
         if(r==1){
             this.dirFlag=false;
         }
-        this.setIcon(imgIcon[r][r1=rand.nextInt(5)]);
+        this.setIcon(imgIcon[r][r1=rand.nextInt(3)]);
         this.setBounds(x,y,this.getIcon().getIconWidth(),this.getIcon().getIconHeight());
     }
     @Override
