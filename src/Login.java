@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Login extends JFrame {
     private JButton jbtnStart = new JButton("Start");
@@ -26,8 +28,9 @@ public class Login extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         cp.setLayout(null);
 
+
         ((JPanel) this.getContentPane()).setOpaque(false);
-        ImageIcon img = new ImageIcon("img/ocean.jpg");
+        ImageIcon img = new ImageIcon("ocean.jpg");
         JLabel background = new JLabel(img);
         this.getLayeredPane().add(background, new Integer(Integer.MIN_VALUE));
         background.setBounds(0, 0, img.getIconWidth(), img.getIconHeight());
@@ -44,13 +47,9 @@ public class Login extends JFrame {
         cp.add(jbtnExit);
 
         jbtnExit.addActionListener(new ActionListener() {
-
             @Override
-
             public void actionPerformed(ActionEvent e) {
-
                 System.exit(0);
-
             }
 
         });
@@ -60,7 +59,7 @@ public class Login extends JFrame {
             @Override
 
             public void actionPerformed(ActionEvent e) {
-                MainFrame mmmm= new MainFrame();
+                MainFrame mmmm= new MainFrame(Login.this);
                 mmmm.setVisible(true);
                 Login.this.setVisible(false);
             }

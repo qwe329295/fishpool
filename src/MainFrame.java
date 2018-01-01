@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,12 +19,14 @@ public class MainFrame extends JFrame{
     private JButton jbtnExit =new JButton("EXIT");
     private JLabel jlb =new JLabel("aa");
     private int imgW,imgH;
-    private int submarineIndex=0;
+//    private int submarineIndex=0;
+    private Login loginFrame=new Login();
     private ArrayList <Submarine> submarineList=new ArrayList<Submarine>();
 //    private ArrayList <Submarine2> submarineList2=new ArrayList<Submarine2>();
     private ArrayList <Thread> threadList =new ArrayList<Thread>();
 
-    public MainFrame(){
+    public MainFrame(Login login){
+        loginFrame=login;
         imgW=jpn.getImgWidth();
         imgH=jpn.getImgHeight();
         this.setBounds(350,100,imgW,imgH+30);
@@ -32,8 +36,17 @@ public class MainFrame extends JFrame{
         toolPane.add(jbtnExit);
 //        jlb.setBounds(100,100,80,30);
 
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dispose();
+                loginFrame.setVisible(true);
+            }
+        });
+
         jbtnAddFish.addActionListener(new ActionListener() {
             @Override
+
             public void actionPerformed(ActionEvent e) {
                 submarineList.add(new Submarine(imgH,imgW));
                 jpn.add(submarineList.get(submarineList.size()-1));
@@ -52,7 +65,7 @@ public class MainFrame extends JFrame{
         cp.setLayout(new BorderLayout(3,3));
         cp.add(jpn, BorderLayout.CENTER);
         cp.add(toolPane,BorderLayout.NORTH);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.validate();
     }
 
