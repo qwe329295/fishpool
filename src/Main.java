@@ -1,7 +1,7 @@
 public class Main {
 
     public static void main(String[] args) {
-        MainFrame mFrm = new MainFrame();
+       Login mFrm = new Login();
         mFrm.setVisible(true);
     }
 }
