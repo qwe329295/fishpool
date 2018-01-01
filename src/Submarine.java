@@ -14,7 +14,7 @@ public class Submarine extends JLabel implements Runnable {
         this.frmH=frmH;
         this.frmW=frmW;
         x=rand.nextInt(frmW-100);
-        y=rand.nextInt(frmH-100);
+        y=rand.nextInt(frmH-250) +150;
         r=rand.nextInt(2);
         if(r==1){
             this.dirFlag=false;
