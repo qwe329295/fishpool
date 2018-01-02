@@ -25,11 +25,19 @@ public class MainFrame extends JFrame{
 //    private ArrayList <Submarine2> submarineList2=new ArrayList<Submarine2>();
     private ArrayList <Thread> threadList =new ArrayList<Thread>();
 
+    private  JLabel jlabboat = new JLabel();
+    private  JLabel jlabbullet= new JLabel();
+    private JLabel jlabcount = new JLabel("Hit:0");
+    private Timer t1fire;
+    private ImageIcon imgboat =new ImageIcon("boat.png");
+    private ImageIcon imgbullet =new ImageIcon("torpedo.png");
+    private int count=0, labX=710,labY=70,bulletX,bulletY;
+
     public MainFrame(Login login){
         loginFrame=login;
         imgW=jpn.getImgWidth();
         imgH=jpn.getImgHeight();
-        this.setBounds(350,100,imgW,imgH+30);
+        this.setBounds(350,100,imgW,imgH+50);
         this.setResizable(false);
         jpn.setLayout(null);
         toolPane.add(jbtnAddFish);
@@ -67,6 +75,28 @@ public class MainFrame extends JFrame{
         cp.add(toolPane,BorderLayout.NORTH);
 //        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.validate();
+
+        jpn.add(jlabboat);
+        jlabboat.setIcon(imgboat);
+        jlabboat.setBounds(labX,labY,150,150);
+        jpn.add(jlabbullet);
+        jlabbullet.setIcon(imgbullet);
+        jlabbullet.setBounds(1000,100,100,100);
+        jlabbullet.setVisible(false);
+
+        t1fire=new Timer(50, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bulletY+=10;
+                jlabbullet.setLocation(bulletX,bulletY);
+                if(bulletX<imgW-100&&bulletX>imgW&&bulletY==imgH){
+                    count++;
+                    jlabcount.setText("HIT:"+count);
+
+                }
+            }
+        });
+
     }
 
 
@@ -75,7 +105,7 @@ public class MainFrame extends JFrame{
         private int imgW,imgH;
         public ImagePanel(){
             try {
-                image = ImageIO.read(new File("11.png"));
+                image = ImageIO.read(new File("bg.png"));
                 imgW = image.getWidth();
                 imgH = image.getHeight();
             }catch(IOException ex){
