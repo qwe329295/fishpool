@@ -1,10 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +31,20 @@ public class MainFrame extends JFrame{
     private int count=0, labX=710,labY=70,bulletX,bulletY;
 
     public MainFrame(Login login){
+        cp=this.getContentPane();
+        cp.setLayout(new BorderLayout(3,3));
+        cp.add(jpn, BorderLayout.CENTER);
+        cp.add(toolPane,BorderLayout.NORTH);
+//        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.validate();
+
+        jpn.add(jlabboat);
+        jlabboat.setIcon(imgboat);
+        jlabboat.setBounds(labX,labY,150,150);
+        jpn.add(jlabbullet);
+        jlabbullet.setIcon(imgbullet);
+        jlabbullet.setBounds(1000,100,100,100);
+        jlabbullet.setVisible(false);
         loginFrame=login;
         imgW=jpn.getImgWidth();
         imgH=jpn.getImgHeight();
@@ -43,6 +54,37 @@ public class MainFrame extends JFrame{
         toolPane.add(jbtnAddFish);
         toolPane.add(jbtnExit);
 //        jlb.setBounds(100,100,80,30);
+
+        this.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()){
+                    case KeyEvent.VK_LEFT:
+                        labX-=10;
+                        jlabboat.setLocation(labX, labY);
+                        System.out.print("123");
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        labX+=10;
+                        jlabboat.setLocation(labX,labY);
+                    case KeyEvent.VK_SPACE:
+                        jlabbullet.setVisible(true);
+                        bulletX=jlabboat.getX();
+                        bulletY=jlabboat.getY();
+                        t1fire.start();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
 
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -69,31 +111,18 @@ public class MainFrame extends JFrame{
                 System.exit(0);
             }
         });
-        cp=this.getContentPane();
-        cp.setLayout(new BorderLayout(3,3));
-        cp.add(jpn, BorderLayout.CENTER);
-        cp.add(toolPane,BorderLayout.NORTH);
-//        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.validate();
 
-        jpn.add(jlabboat);
-        jlabboat.setIcon(imgboat);
-        jlabboat.setBounds(labX,labY,150,150);
-        jpn.add(jlabbullet);
-        jlabbullet.setIcon(imgbullet);
-        jlabbullet.setBounds(1000,100,100,100);
-        jlabbullet.setVisible(false);
 
         t1fire=new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 bulletY+=10;
                 jlabbullet.setLocation(bulletX,bulletY);
-                if(bulletX<imgW-100&&bulletX>imgW&&bulletY==imgH){
-                    count++;
-                    jlabcount.setText("HIT:"+count);
-
-                }
+//                if(bulletX<imgW-100&&bulletX>imgW&&bulletY==imgH){
+//                    count++;
+//                    jlabcount.setText("HIT:"+count);
+//
+//                }
             }
         });
 
