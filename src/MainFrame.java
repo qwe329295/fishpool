@@ -8,13 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class MainFrame extends JFrame{
+public class MainFrame extends JFrame implements KeyListener{
     private Container cp;
     private ImagePanel jpn =new ImagePanel();
     private JPanel toolPane=new JPanel(new GridLayout(1,2,5,5));
     private JButton  jbtnAddFish =new JButton("Add submarine");
     private JButton jbtnExit =new JButton("EXIT");
-    private JLabel jlb =new JLabel("aa");
     private int imgW,imgH;
 //    private int submarineIndex=0;
     private Login loginFrame=new Login();
@@ -45,6 +44,7 @@ public class MainFrame extends JFrame{
         jlabbullet.setIcon(imgbullet);
         jlabbullet.setBounds(1000,100,100,100);
         jlabbullet.setVisible(false);
+
         loginFrame=login;
         imgW=jpn.getImgWidth();
         imgH=jpn.getImgHeight();
@@ -53,38 +53,38 @@ public class MainFrame extends JFrame{
         jpn.setLayout(null);
         toolPane.add(jbtnAddFish);
         toolPane.add(jbtnExit);
+        this.addKeyListener(this);
 //        jlb.setBounds(100,100,80,30);
 
-        this.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()){
-                    case KeyEvent.VK_LEFT:
-                        labX-=10;
-                        jlabboat.setLocation(labX, labY);
-                        System.out.print("123");
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        labX+=10;
-                        jlabboat.setLocation(labX,labY);
-                    case KeyEvent.VK_SPACE:
-                        jlabbullet.setVisible(true);
-                        bulletX=jlabboat.getX();
-                        bulletY=jlabboat.getY();
-                        t1fire.start();
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        });
+//        this.addKeyListener(new KeyListener() {
+//            @Override
+//            public void keyTyped(KeyEvent e) {
+//
+//            }
+//
+//            @Override
+//            public void keyPressed(KeyEvent e) {
+//                switch (e.getKeyCode()){
+//                    case KeyEvent.VK_LEFT:
+//                        labX-=10;
+//                        System.out.print("123");
+//                        break;
+//                    case KeyEvent.VK_RIGHT:
+//                        labX+=10;
+//                    case KeyEvent.VK_SPACE:
+//                        jlabbullet.setVisible(true);
+//                        bulletX=jlabboat.getX();
+//                        bulletY=jlabboat.getY();
+//                        t1fire.start();
+//                }
+//                jlabboat.setLocation(labX,labY);
+//            }
+//
+//            @Override
+//            public void keyReleased(KeyEvent e) {
+//
+//            }
+//        });
 
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -125,6 +125,26 @@ public class MainFrame extends JFrame{
 //                }
             }
         });
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                labX -= 10;
+                jlabboat.setLocation(labX,labY);
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 
