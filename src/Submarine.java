@@ -22,6 +22,12 @@ public class Submarine extends JLabel implements Runnable {
         this.setIcon(imgIcon[r][r1=rand.nextInt(3)]);
         this.setBounds(x,y,this.getIcon().getIconWidth(),this.getIcon().getIconHeight());
     }
+    public int getX(){
+        return x;
+    }
+    public int getY(){
+        return y;
+    }
     @Override
     public  void run(){
         t1= new Timer(rand.nextInt(1000) + 50, new ActionListener() {

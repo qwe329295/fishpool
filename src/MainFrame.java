@@ -25,6 +25,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     private JLabel jlabbullet = new JLabel();
     private JLabel jlabcount = new JLabel("Hit:0");
     private Timer t1fire;
+    private boolean fireC = false;
 
     private ImageIcon imgbullet = new ImageIcon("torpedo.png");
     private boolean is_drag = false;
@@ -46,13 +47,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
         jpn.add(jlabbullet);
         jlabbullet.setIcon(imgbullet);
-        jlabbullet.setBounds(1000, 100, 100, 100);
+        jlabbullet.setBounds(2000, 100, 100, 100);
         jlabbullet.setVisible(false);
 
         loginFrame = login;
         imgW = jpn.getImgWidth();
         imgH = jpn.getImgHeight();
-        this.setBounds(350, 100, imgW, imgH + 50);
+        this.setBounds(50, 50, imgW, imgH + 50);
         this.setResizable(false);
         jpn.setLayout(null);
         toolPane.add(jbtnAddFish);
@@ -90,9 +91,23 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         t1fire = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                for(int i = 0; i < submarineList.size(); i++){
+                    if((bulletY > submarineList.get(i).getY() && bulletY < submarineList.get(i).getY()+10) &&
+                            (bulletX < submarineList.get(i).getX()+80 && bulletX > submarineList.get(i).getX()-80)){
+                        fireC =false;
+                        jlabbullet.setVisible(false);
+                        submarineList.remove(submarineList.get(i));
+                        t1fire.stop();
+                    }
+                    if(bulletY+100 > 715) {
+                        fireC = false;
+                        jlabbullet.setVisible(false);
+                        t1fire.stop();
+                    }
+                }
                 bulletY += 10;
                 jlabbullet.setLocation(bulletX, bulletY);
+
 
 //                if(bulletX<imgW-100&&bulletX>imgW&&bulletY==imgH){
 //                    count++;
@@ -108,10 +123,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     public void mouseClicked(MouseEvent e) {
         switch(e.getButton()){
             case MouseEvent.BUTTON3:
-                jlabbullet.setVisible(true);
-                bulletX=jlabboat.getX();
-                bulletY=jlabboat.getY();
-                t1fire.start();
+                if(!fireC){
+                    jlabbullet.setVisible(true);
+                    bulletX=jlabboat.getX();
+                    bulletY=jlabboat.getY();
+                    fireC = true;
+                    t1fire.start();
+                }
         }
     }
 
