@@ -8,83 +8,57 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class MainFrame extends JFrame implements KeyListener{
+public class MainFrame extends JFrame implements MouseListener, MouseMotionListener {
     private Container cp;
-    private ImagePanel jpn =new ImagePanel();
-    private JPanel toolPane=new JPanel(new GridLayout(1,2,5,5));
-    private JButton  jbtnAddFish =new JButton("Add submarine");
-    private JButton jbtnExit =new JButton("EXIT");
-    private int imgW,imgH;
-//    private int submarineIndex=0;
-    private Login loginFrame=new Login();
-    private ArrayList <Submarine> submarineList=new ArrayList<Submarine>();
-//    private ArrayList <Submarine2> submarineList2=new ArrayList<Submarine2>();
-    private ArrayList <Thread> threadList =new ArrayList<Thread>();
+    private ImagePanel jpn = new ImagePanel();
+    private JPanel toolPane = new JPanel(new GridLayout(1, 2, 5, 5));
+    private JButton jbtnAddFish = new JButton("Add submarine");
+    private JButton jbtnExit = new JButton("EXIT");
+    private int imgW, imgH;
+    //    private int submarineIndex=0;
+    private Login loginFrame = new Login();
+    private ArrayList<Submarine> submarineList = new ArrayList<Submarine>();
+    //    private ArrayList <Submarine2> submarineList2=new ArrayList<Submarine2>();
+    private ArrayList<Thread> threadList = new ArrayList<Thread>();
 
-    private  JLabel jlabboat = new JLabel();
-    private  JLabel jlabbullet= new JLabel();
+    private JLabel jlabboat = new JLabel(new ImageIcon("boat.png"));
+    private JLabel jlabbullet = new JLabel();
     private JLabel jlabcount = new JLabel("Hit:0");
     private Timer t1fire;
-    private ImageIcon imgboat =new ImageIcon("boat.png");
-    private ImageIcon imgbullet =new ImageIcon("torpedo.png");
-    private int count=0, labX=710,labY=70,bulletX,bulletY;
 
-    public MainFrame(Login login){
-        cp=this.getContentPane();
-        cp.setLayout(new BorderLayout(3,3));
+    private ImageIcon imgbullet = new ImageIcon("torpedo.png");
+    private boolean is_drag = false;
+    private int count = 0, labX = 710, labY = 70, bulletX, bulletY;
+    private int x1,y1,x2,y2;
+
+    public MainFrame(Login login) {
+        cp = this.getContentPane();
+        cp.setLayout(new BorderLayout(3, 3));
         cp.add(jpn, BorderLayout.CENTER);
-        cp.add(toolPane,BorderLayout.NORTH);
+        cp.add(toolPane, BorderLayout.NORTH);
 //        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.validate();
 
+        jlabboat.setBounds(labX, labY, 150, 150);
         jpn.add(jlabboat);
-        jlabboat.setIcon(imgboat);
-        jlabboat.setBounds(labX,labY,150,150);
+        jlabboat.addMouseListener(this);
+        jlabboat.addMouseMotionListener(this);
+
         jpn.add(jlabbullet);
         jlabbullet.setIcon(imgbullet);
-        jlabbullet.setBounds(1000,100,100,100);
+        jlabbullet.setBounds(1000, 100, 100, 100);
         jlabbullet.setVisible(false);
 
-        loginFrame=login;
-        imgW=jpn.getImgWidth();
-        imgH=jpn.getImgHeight();
-        this.setBounds(350,100,imgW,imgH+50);
+        loginFrame = login;
+        imgW = jpn.getImgWidth();
+        imgH = jpn.getImgHeight();
+        this.setBounds(350, 100, imgW, imgH + 50);
         this.setResizable(false);
         jpn.setLayout(null);
         toolPane.add(jbtnAddFish);
         toolPane.add(jbtnExit);
-        this.addKeyListener(this);
 //        jlb.setBounds(100,100,80,30);
 
-//        this.addKeyListener(new KeyListener() {
-//            @Override
-//            public void keyTyped(KeyEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//                switch (e.getKeyCode()){
-//                    case KeyEvent.VK_LEFT:
-//                        labX-=10;
-//                        System.out.print("123");
-//                        break;
-//                    case KeyEvent.VK_RIGHT:
-//                        labX+=10;
-//                    case KeyEvent.VK_SPACE:
-//                        jlabbullet.setVisible(true);
-//                        bulletX=jlabboat.getX();
-//                        bulletY=jlabboat.getY();
-//                        t1fire.start();
-//                }
-//                jlabboat.setLocation(labX,labY);
-//            }
-//
-//            @Override
-//            public void keyReleased(KeyEvent e) {
-//
-//            }
-//        });
 
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -98,10 +72,10 @@ public class MainFrame extends JFrame implements KeyListener{
             @Override
 
             public void actionPerformed(ActionEvent e) {
-                submarineList.add(new Submarine(imgH,imgW));
-                jpn.add(submarineList.get(submarineList.size()-1));
-                threadList.add(new Thread(submarineList.get(submarineList.size()-1)));
-                threadList.get(threadList.size()-1).start();
+                submarineList.add(new Submarine(imgH, imgW));
+                jpn.add(submarineList.get(submarineList.size() - 1));
+                threadList.add(new Thread(submarineList.get(submarineList.size() - 1)));
+                threadList.get(threadList.size() - 1).start();
             }
         });
 
@@ -113,11 +87,11 @@ public class MainFrame extends JFrame implements KeyListener{
         });
 
 
-        t1fire=new Timer(50, new ActionListener() {
+        t1fire = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                bulletY+=10;
-                jlabbullet.setLocation(bulletX,bulletY);
+                bulletY += 10;
+                jlabbullet.setLocation(bulletX, bulletY);
 //                if(bulletX<imgW-100&&bulletX>imgW&&bulletY==imgH){
 //                    count++;
 //                    jlabcount.setText("HIT:"+count);
@@ -129,47 +103,79 @@ public class MainFrame extends JFrame implements KeyListener{
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void mouseClicked(MouseEvent e) {
 
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_LEFT:
-                labX -= 10;
-                jlabboat.setLocation(labX,labY);
-                break;
-        }
+    public void mousePressed(MouseEvent e) {
+        if (is_drag) return;
+        if (e.getButton() == 1) is_drag = true;
+        x1 = e.getX();
+        y2 = e.getY();
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void mouseReleased(MouseEvent e) {
+        if (!is_drag)return;
+        is_drag=false;
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        if(! is_drag) return;
+        x2 = e.getX();
+        y2 = e.getY();
+        labX = labX + (x2 - x1);
+        labY = labY + (y2 - y1);
+        if (labX <= 0) labX = 0;
+        if (labX >= 1420) labX = 1424;
+        if (labY <= 0) labY = 0;
+        if (labY >=715)labY = 719;
+        jlabboat.setLocation(labX, labY);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
 
     }
 
 
-    class  ImagePanel extends JPanel{
+    class ImagePanel extends JPanel {
         private BufferedImage image;
-        private int imgW,imgH;
-        public ImagePanel(){
+        private int imgW, imgH;
+
+        public ImagePanel() {
             try {
                 image = ImageIO.read(new File("bg.png"));
                 imgW = image.getWidth();
                 imgH = image.getHeight();
-            }catch(IOException ex){
-                javax.swing.JOptionPane.showMessageDialog(this,"IOException:"+ex.toString());
+            } catch (IOException ex) {
+                javax.swing.JOptionPane.showMessageDialog(this, "IOException:" + ex.toString());
             }
         }
+
         @Override
-        protected  void paintComponent(Graphics g){
+        protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.drawImage(image,0,0,null);
+            g.drawImage(image, 0, 0, null);
         }
-        public int getImgWidth(){
+
+        public int getImgWidth() {
             return imgW;
         }
-        public int getImgHeight(){
+
+        public int getImgHeight() {
             return imgH;
         }
     }
