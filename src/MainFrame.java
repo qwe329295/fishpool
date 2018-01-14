@@ -90,8 +90,10 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         t1fire = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 bulletY += 10;
                 jlabbullet.setLocation(bulletX, bulletY);
+
 //                if(bulletX<imgW-100&&bulletX>imgW&&bulletY==imgH){
 //                    count++;
 //                    jlabcount.setText("HIT:"+count);
@@ -104,7 +106,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        switch(e.getButton()){
+            case MouseEvent.BUTTON3:
+                jlabbullet.setVisible(true);
+                bulletX=jlabboat.getX();
+                bulletY=jlabboat.getY();
+                t1fire.start();
+        }
     }
 
     @Override
@@ -112,7 +120,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         if (is_drag) return;
         if (e.getButton() == 1) is_drag = true;
         x1 = e.getX();
-        y2 = e.getY();
+//        y2 = e.getY();
     }
 
     @Override
@@ -135,11 +143,11 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     public void mouseDragged(MouseEvent e) {
         if(! is_drag) return;
         x2 = e.getX();
-        y2 = e.getY();
+//        y2 = e.getY();
         labX = labX + (x2 - x1);
-        labY = labY + (y2 - y1);
+//        labY = labY + (y2 - y1);
         if (labX <= 0) labX = 0;
-        if (labX >= 1420) labX = 1424;
+        if (labX >= 1255) labX = 1255;
         if (labY <= 0) labY = 0;
         if (labY >=715)labY = 719;
         jlabboat.setLocation(labX, labY);
