@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 
 public class MainFrame extends JFrame implements MouseListener, MouseMotionListener {
@@ -27,12 +28,25 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     private Timer t1fire;
     private boolean fireC = false;
 
+    private Submarine selectedSubmarine;
+    private boolean selectedSubmarineflag=false;
+
     private ImageIcon imgbullet = new ImageIcon("torpedo.png");
     private boolean is_drag = false;
     private int count = 0, labX = 710, labY = 70, bulletX, bulletY;
-    private int x1,y1,x2,y2;
+    private int x1, y1, x2, y2;
+    java.util.Timer timer = new java.util.Timer(true);
+    TimerTask task = new TimerTask() {
+        public void run() {
+            submarineList.add(new Submarine(imgH, imgW));//MainFrame mfrm
+            jpn.add(submarineList.get(submarineList.size() - 1));
+            threadList.add(new Thread(submarineList.get(submarineList.size() - 1)));
+            threadList.get(threadList.size() - 1).start();
+        }
+    };
 
-    public MainFrame(Login login) {
+    public MainFrame(Login login ) {
+        Submarine subM=new Submarine(20,20);
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout(3, 3));
         cp.add(jpn, BorderLayout.CENTER);
@@ -56,9 +70,11 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         this.setBounds(50, 50, imgW, imgH + 50);
         this.setResizable(false);
         jpn.setLayout(null);
-        toolPane.add(jbtnAddFish);
+//        toolPane.add(jbtnAddFish);
+        toolPane.add(jlabcount);
         toolPane.add(jbtnExit);
 //        jlb.setBounds(100,100,80,30);
+        timer.schedule(task,1000,2000);
 
 
         this.addWindowListener(new WindowAdapter() {
@@ -69,16 +85,16 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
             }
         });
 
-        jbtnAddFish.addActionListener(new ActionListener() {
-            @Override
-
-            public void actionPerformed(ActionEvent e) {
-                submarineList.add(new Submarine(imgH, imgW));
-                jpn.add(submarineList.get(submarineList.size() - 1));
-                threadList.add(new Thread(submarineList.get(submarineList.size() - 1)));
-                threadList.get(threadList.size() - 1).start();
-            }
-        });
+//        jbtnAddFish.addActionListener(new ActionListener() {
+//            @Override
+//
+//            public void actionPerformed(ActionEvent e) {
+//                submarineList.add(new Submarine(imgH, imgW));
+//                jpn.add(submarineList.get(submarineList.size() - 1));
+//                threadList.add(new Thread(submarineList.get(submarineList.size() - 1)));
+//                threadList.get(threadList.size() - 1).start();
+//            }
+//        });
 
         jbtnExit.addActionListener(new ActionListener() {
             @Override
@@ -91,15 +107,20 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         t1fire = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for(int i = 0; i < submarineList.size(); i++){
-                    if((bulletY > submarineList.get(i).getY() && bulletY < submarineList.get(i).getY()+10) &&
-                            (bulletX < submarineList.get(i).getX()+80 && bulletX > submarineList.get(i).getX()-80)){
-                        fireC =false;
+                for (int i = 0; i < submarineList.size(); i++) {
+                    if ((bulletY > submarineList.get(i).getY() && bulletY < submarineList.get(i).getY() + 10) &&
+                            (bulletX < submarineList.get(i).getX() + 80 && bulletX > submarineList.get(i).getX() - 80)) {
+                        fireC = false;
                         jlabbullet.setVisible(false);
                         submarineList.remove(submarineList.get(i));
+                        subM.this.setselected
+//                        Submarine.this.subM.setselectedSubmarine();
+//                        Submarine.this.subM.changeicon();
                         t1fire.stop();
+                        count++;
+                        jlabcount.setText("hit:   "+count);
                     }
-                    if(bulletY+100 > 715) {
+                    if (bulletY + 100 > 715) {
                         fireC = false;
                         jlabbullet.setVisible(false);
                         t1fire.stop();
@@ -121,12 +142,12 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        switch(e.getButton()){
+        switch (e.getButton()) {
             case MouseEvent.BUTTON3:
-                if(!fireC){
+                if (!fireC) {
                     jlabbullet.setVisible(true);
-                    bulletX=jlabboat.getX();
-                    bulletY=jlabboat.getY();
+                    bulletX = jlabboat.getX();
+                    bulletY = jlabboat.getY();
                     fireC = true;
                     t1fire.start();
                 }
@@ -143,8 +164,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (!is_drag)return;
-        is_drag=false;
+        if (!is_drag) return;
+        is_drag = false;
     }
 
     @Override
@@ -159,7 +180,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if(! is_drag) return;
+        if (!is_drag) return;
         x2 = e.getX();
 //        y2 = e.getY();
         labX = labX + (x2 - x1);
@@ -167,7 +188,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         if (labX <= 0) labX = 0;
         if (labX >= 1255) labX = 1255;
         if (labY <= 0) labY = 0;
-        if (labY >=715)labY = 719;
+        if (labY >= 715) labY = 719;
         jlabboat.setLocation(labX, labY);
     }
 
@@ -197,6 +218,10 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
             g.drawImage(image, 0, 0, null);
         }
 
+        public void setselectedSubmarine(Submarine Submarine1 ){
+       selectedSubmarine=Submarine1;
+       selectedSubmarineflag=false;
+        }
         public int getImgWidth() {
             return imgW;
         }
