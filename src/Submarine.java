@@ -63,14 +63,14 @@ public class Submarine extends JLabel implements Runnable {
         t1.start();
     }
 
-    public void changeicon() {
-        try {
-            ImageIcon imgmoney = new ImageIcon("money.png");
-            Submarine.this.setIcon(imgmoney);
-            t1.stop();
-        } catch (Exception AVV) {
-            System.out.println(AVV);
-        }
-
-    }
+//    public void changeicon() {
+//        try {
+//            ImageIcon imgmoney = new ImageIcon("money.png");
+//            Submarine.this.setIcon(imgmoney);
+//            t1.stop();
+//        } catch (Exception AVV) {
+//            System.out.println(AVV);
+//        }
+//
+//    }
 }

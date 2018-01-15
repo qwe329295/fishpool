@@ -46,7 +46,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     };
 
     public MainFrame(Login login ) {
-        Submarine subM=new Submarine(20,20);
+//        Submarine subM=new Submarine(20,20);
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout(3, 3));
         cp.add(jpn, BorderLayout.CENTER);
@@ -113,7 +113,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                         fireC = false;
                         jlabbullet.setVisible(false);
                         submarineList.remove(submarineList.get(i));
-                        subM.this.setselected
+//                        subM.this.setselected
 //                        Submarine.this.subM.setselectedSubmarine();
 //                        Submarine.this.subM.changeicon();
                         t1fire.stop();
@@ -218,10 +218,10 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
             g.drawImage(image, 0, 0, null);
         }
 
-        public void setselectedSubmarine(Submarine Submarine1 ){
-       selectedSubmarine=Submarine1;
-       selectedSubmarineflag=false;
-        }
+//        public void setselectedSubmarine(Submarine Submarine1 ){
+//       selectedSubmarine=Submarine1;
+//       selectedSubmarineflag=false;
+//        }
         public int getImgWidth() {
             return imgW;
         }
